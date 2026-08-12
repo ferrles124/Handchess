@@ -3,6 +3,7 @@ package com.example.chesshand
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
+import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
 
@@ -29,9 +30,8 @@ class PalmDetector(context: Context) {
     }
 
     fun detect(bitmap: Bitmap): RectF? {
-        val results = detector?.detect(org.tensorflow.lite.task.vision.segmenter.OutputType.IMAGE, bitmap)
-        // Eğer model tespit yaparsa ilk tespit kutusunun merkezini döndürür
-        val firstResult = results?.firstOrNull()?.categories?.firstOrNull()
+        val tensorImage = TensorImage.fromBitmap(bitmap)
+        val results = detector?.detect(tensorImage)
         return results?.firstOrNull()?.boundingBox
     }
 }
